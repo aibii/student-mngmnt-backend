@@ -1,0 +1,16 @@
+// https://postman-echo.com/get?firstName=Allen
+
+### Can we send a request to our server?
+POST http://localhost:8080/api/v1/student
+//we were able to take this payload and send it to our server
+Content-Type: application/json
+
+{
+    "name": "Bilal",
+    "email": "bilal@gmail.com",
+    "dob": "1995-12-17"
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/student/1
