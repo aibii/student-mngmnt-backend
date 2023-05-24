@@ -45,29 +45,35 @@ public class StudentService { //a class that needs to be instantiated, i.e needs
         }
     }
 
-    @Transactional
-    public void updateStudent(Long studentId, String name, String email) {
-        Optional<Student> studentToUpdate = studentRepository.findById(studentId);
-        if (studentToUpdate.isEmpty()) {
-            throw new IllegalStateException("Student with id " + studentId + "does not exists");
-        }
-        Student student = studentToUpdate.get();
-        if(name != null && name.length() > 0 &&
-            !Objects.equals(student.getName(), name)) {
-                student.setName(name);
-            }
-        if(email != null && email.length() > 0 &&
-            !Objects.equals(student.getEmail(), email)) {
-            Optional<Student> studentOptional = studentRepository
-                    .findStudentByEmail(email);
-            if(studentOptional.isPresent()) {
-                throw new IllegalStateException("email taken");
-            }
-            student.setName(name);
-        }
-    }
-
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
+
+    public Student findById(Long id) throws StudentNotFoundException {
+        Optional<Student> result = studentRepository.findById(id);
+        if(result.isPresent())
+        {
+            return result.get();
+        }
+        else
+        {
+            throw new StudentNotFoundException("Could not find any students with id" + id);
+        }
+    }
+
+public Student updateStudent(Student student) throws StudentNotFoundException {
+    Optional<Student> existingStudentOpt = studentRepository.findById(student.getId());
+
+    if (existingStudentOpt.isPresent()) {
+        Student existingStudent = existingStudentOpt.get();
+        existingStudent.setName(student.getName());
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setDob(student.getDob());
+
+        return studentRepository.save(existingStudent);
+    } else {
+        throw new StudentNotFoundException("Student not found");
+    }
+}
+
 }

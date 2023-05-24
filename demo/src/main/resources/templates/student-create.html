@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Student</title>
+</head>
+<body>
+    <form action="#" th:action="@{/students/student-create}" th:object="${student}" method="post">
+        <label for="name">First name</label>
+        <input type="text" th:field="*{name}" id="name" placeholder="First Name">
+        <label for="email">Email</label>
+        <input type="text" th:field="*{email}" id="email" placeholder="Email">
+        <label for="dob">Date of Birth</label>
+        <input type="date" th:field="*{dob}" id="dob" placeholder="Date of Birth">
+        <input type="submit" value="Create Student">
+    </form>
+</body>
+</html>
