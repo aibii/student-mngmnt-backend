@@ -20,6 +20,10 @@ public class TeacherService {
     }
 
     public Teacher saveTeacher(Teacher teacher) {
+        if (teacher.getFirstName() == null) {
+            throw new IllegalArgumentException("Teacher's first name must not be null.");
+        }
+        System.out.println(teacher);
         return teacherRepository.save(teacher);
     }
 
