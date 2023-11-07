@@ -31,9 +31,19 @@ public class TeacherService {
         teacherRepository.deleteById(id);
     }
 
-    public Object updateTeacher(Long id, Teacher teacher) {
-        return null;
+    public Teacher updateTeacher(Long id, Teacher updatedTeacher) {
+        return teacherRepository.findById(id)
+                .map(teacher -> {
+                    teacher.setFirstName(updatedTeacher.getFirstName());
+                    teacher.setLastName(updatedTeacher.getLastName());
+                    teacher.setDateOfBirth(updatedTeacher.getDateOfBirth());
+                    teacher.setAddress(updatedTeacher.getAddress());
+                    teacher.setPhoneNumber(updatedTeacher.getPhoneNumber());
+                    return teacherRepository.save(teacher);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Teacher with id: " + id + " does not exist"));
     }
+    
 
     // ... other relevant methods ...
 }

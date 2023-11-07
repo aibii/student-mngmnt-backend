@@ -48,9 +48,9 @@ public class Course {
     @Column(name = "monthly_fee", nullable = false)
     private BigDecimal monthlyFee;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    /*@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "teacher_id", nullable = false)
-    private Teacher teacher;
+    private Teacher teacher;*/
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentCourse> studentCourses = new ArrayList<>();

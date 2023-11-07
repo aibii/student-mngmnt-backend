@@ -3,6 +3,7 @@ package com.example.demo.teacher;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,17 @@ public class TeacherController {
         return teacherService.getAllTeachers();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
+    Teacher teacher = teacherService.getTeacherById(id);
+    if (teacher != null) {
+        return ResponseEntity.ok(teacher);
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+    }
+
+
 
     @PostMapping
     public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) {
@@ -33,9 +45,13 @@ public class TeacherController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher) {
-        return ResponseEntity.ok(teacherService.updateTeacher(id, teacher));
+public ResponseEntity<Teacher> updateTeacher(@PathVariable Long id, @RequestBody Teacher updatedTeacher) {
+    Teacher updated = teacherService.updateTeacher(id, updatedTeacher);
+    if(updated == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    return new ResponseEntity<>(updated, HttpStatus.OK);
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
