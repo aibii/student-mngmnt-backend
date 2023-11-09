@@ -1,73 +1,59 @@
 package com.example.demo.student;
 
-import java.time.LocalDate;
-import java.time.Month;
+import java.lang.System.Logger;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
+@Service
+public class StudentService {
 
-@Service //a service class. SERVICE LAYER, business logic
-public class StudentService { //a class that needs to be instantiated, i.e needs to be a spring bean
-    
-    private final StudentRepository studentRepository;
+    //private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
+    private StudentRepository studentRepository;
 
-    public List<Student> getStudents() {
+    public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
-	public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
-        if (studentOptional.isPresent()) {
-            throw new IllegalStateException("email taken");
-        }
-        studentRepository.save(student);
-	}
+    public Optional<Student> getStudentById(Long id) {
+        return studentRepository.findById(id);
+    }
 
-    public void deleteStudent(Long studentId) {
-        boolean exists = studentRepository.existsById(studentId);
-        if(exists) {
-            studentRepository.deleteById(studentId);
-        }
-        else {
-            throw new IllegalStateException(
-                "student with id " + studentId + "does not exists");
+    public Student saveStudent(Student student) {
+        //logger.info("Saving student with details: {}", student);
+        return studentRepository.save(student);
+    }
+
+    public Student updateStudent(Long id, Student updatedStudent) {
+        if (studentRepository.existsById(id)) {
+            //logger.info("Updating student with ID: {}", id);
+            return studentRepository.save(updatedStudent);
+        } else {
+           // logger.error("Student with ID {} not found", id);
+            // You might want to throw an exception here or handle it in some way
+            return null;
         }
     }
 
-    @Transactional
-    public void updateStudent(Long studentId, String name, String email) {
-        Optional<Student> studentToUpdate = studentRepository.findById(studentId);
-        if (studentToUpdate.isEmpty()) {
-            throw new IllegalStateException("Student with id " + studentId + "does not exists");
-        }
-        Student student = studentToUpdate.get();
-        if(name != null && name.length() > 0 &&
-            !Objects.equals(student.getName(), name)) {
-                student.setName(name);
-            }
-        if(email != null && email.length() > 0 &&
-            !Objects.equals(student.getEmail(), email)) {
-            Optional<Student> studentOptional = studentRepository
-                    .findStudentByEmail(email);
-            if(studentOptional.isPresent()) {
-                throw new IllegalStateException("email taken");
-            }
-            student.setName(name);
+    public void deleteStudent(Long id) {
+        if (studentRepository.existsById(id)) {
+           // logger.info("Deleting student with ID: {}", id);
+            studentRepository.deleteById(id);
+        } else {
+          //  logger.error("Student with ID {} not found", id);
+            // Handle this case as you see fit (e.g., throw an exception)
         }
     }
 
-    public List<Student> findAll() {
+    public List<Student> getStudentsByStatus(String status) {
+       // logger.info("Fetching students with status: {}", status);
         return studentRepository.findAll();
     }
+
+    // Implement any other student-related business logic here.
 }
