@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.group.Group;
 import com.example.demo.payment.Payment;
-import com.example.demo.student_course.StudentCourse;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "students")
 @Data  // Generates getters, setters, toString, equals, and hashCode methods
 @NoArgsConstructor  // Generates a no-args constructor
-@EqualsAndHashCode(exclude = {"payments", "studentCourses"})  // Exclude relationships to prevent potential stack overflow issues
+@EqualsAndHashCode(exclude = {"payments", "Groups"})  // Exclude relationships to prevent potential stack overflow issues
 public class Student {
 
     @Id
@@ -75,7 +75,7 @@ public class Student {
     private List<Payment> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<StudentCourse> studentCourses = new ArrayList<>();
+    private List<Group> Groups = new ArrayList<>();
 
     // Enum definitions
     public enum Gender {

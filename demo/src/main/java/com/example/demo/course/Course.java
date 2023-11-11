@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.student_course.StudentCourse;
+import com.example.demo.group.Group;
 import com.example.demo.teacher.Teacher;
 
 import jakarta.persistence.CascadeType;
@@ -53,6 +53,6 @@ public class Course {
     private Teacher teacher;*/
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentCourse> studentCourses = new ArrayList<>();
+    private List<Group> Groups = new ArrayList<>();
 
 }
