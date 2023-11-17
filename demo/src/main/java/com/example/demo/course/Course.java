@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import com.example.demo.student_course.StudentCourse;
+import com.example.demo.group.Group;
 import com.example.demo.teacher.Teacher;
 
 import jakarta.persistence.CascadeType;
@@ -33,7 +34,7 @@ public class Course {
     @Column(name = "course_id")
     private Long id;
 
-    @Column(name = "course_name", nullable = false)
+    @Column(name = "courseName", nullable = false)
     private String courseName;
 
     @Column(name = "description")
@@ -52,7 +53,7 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;*/
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentCourse> studentCourses = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private Set<Group> groups;
 
 }

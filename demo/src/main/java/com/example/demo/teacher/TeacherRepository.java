@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     // Custom query methods (if needed) can be added here
+    Teacher findByFirstName(String name);
 }
