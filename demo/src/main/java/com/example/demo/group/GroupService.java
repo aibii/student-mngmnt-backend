@@ -12,6 +12,8 @@ import com.example.demo.course.CourseRepository;
 import com.example.demo.teacher.Teacher;
 import com.example.demo.teacher.TeacherRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class GroupService {
 
@@ -27,7 +29,7 @@ public class GroupService {
     private CourseRepository courseRepository;
 
     public List<Group> getAllGroups() {
-        return groupRepository.findAll();
+        return groupRepository.findAllWithDetails();
     }
 
     public Group getGroupById(Long id) {
@@ -35,24 +37,24 @@ public class GroupService {
     }
 
     public Group saveGroup(Group group) {
-        // Assuming group contains teacherId and courseId
-        Long teacherId = group.getTeacher().getId();
-        Long courseId = group.getCourse().getId();
+        logger.debug("Saving group: {}", group);
     
-        // Fetch the Teacher and Course from the database
-        Teacher teacher = teacherRepository.findById(teacherId)
-                         .orElseThrow(() -> new RuntimeException("Teacher not found"));
-        Course course = courseRepository.findById(courseId)
-                         .orElseThrow(() -> new RuntimeException("Course not found"));
+        Teacher teacher = teacherRepository.findById(group.getTeacher().getId())
+                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
+        logger.debug("Fetched teacher: {}", teacher);
     
-        // Set the Teacher and Course in the Group object
+        Course course = courseRepository.findById(group.getCourse().getId())
+                        .orElseThrow(() -> new RuntimeException("Course not found"));
+        logger.debug("Fetched course: {}", course);
+    
         group.setTeacher(teacher);
         group.setCourse(course);
     
-        // Save the Group entity
-        return groupRepository.save(group);
-    }
+        Group savedGroup = groupRepository.save(group);
+        logger.debug("Group saved with ID: {}", savedGroup.getId());
     
+        return savedGroup;
+    }
     
     public void deleteGroup(Long id) {
         groupRepository.deleteById(id);

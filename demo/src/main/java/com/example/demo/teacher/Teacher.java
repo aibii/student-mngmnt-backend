@@ -1,12 +1,16 @@
 package com.example.demo.teacher;
 
 import java.time.LocalDate;
+import java.util.Set;
+
+import com.example.demo.group.Group;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +40,9 @@ public class Teacher {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "teacher")
+    private Set<Group> groups;
 
     public Object map(Object object) {
         return null;

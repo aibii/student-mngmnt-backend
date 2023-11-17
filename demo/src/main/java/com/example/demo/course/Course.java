@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.example.demo.group.Group;
 import com.example.demo.teacher.Teacher;
@@ -52,7 +53,7 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;*/
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Group> Groups = new ArrayList<>();
+    @OneToMany(mappedBy = "course")
+    private Set<Group> groups;
 
 }

@@ -31,6 +31,9 @@ public class GroupController {
 
     @PostMapping
     public ResponseEntity<Group> createGroup(@RequestBody Group group) {
+        System.out.println("Received Group: " + group);
+        // Log the received Group object
+   // log.info("Received Group for saving: {}", group);
     Group createdGroup = groupService.saveGroup(group);
     return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
 }
