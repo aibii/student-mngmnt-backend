@@ -9,6 +9,6 @@ import com.example.demo.teacher.Teacher;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     // Custom query methods (if needed) can be added here
-    Course findByName(String name);
+    Course findByCourseName(String name);
 }
 

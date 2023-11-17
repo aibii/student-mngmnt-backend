@@ -1,9 +1,12 @@
 package com.example.demo.group;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.example.demo.course.Course;
 import com.example.demo.student.Student;
+import com.example.demo.teacher.Teacher;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +16,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,15 +35,17 @@ public class Group {
     @Column(name = "group_name", nullable = false)
     private String groupName;
 
-    // Assuming teacherName is just a string and not a relation to a Teacher entity
-    @Column(name = "teacher_id", nullable = false)
-    private Long teacherId;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
+
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "course_id", nullable = false)
-    private Long courseId;  // Assuming this is a foreign key reference
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -46,7 +53,9 @@ public class Group {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     public Long getId() {
         return this.id;
@@ -64,12 +73,12 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public Long getTeacherId() {
-        return this.teacherId;
+    public Teacher getTeacher() {
+        return this.teacher;
     }
 
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacherId(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public String getDescription() {
@@ -80,12 +89,12 @@ public class Group {
         this.description = description;
     }
 
-    public Long getCourseId() {
-        return this.courseId;
+    public Course getCourseId() {
+        return this.course;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCourseId(Course course) {
+        this.course = course;
     }
 
     public LocalDate getStartDate() {

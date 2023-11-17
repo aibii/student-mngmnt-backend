@@ -33,7 +33,7 @@ public class Course {
     @Column(name = "course_id")
     private Long id;
 
-    @Column(name = "course_name", nullable = false)
+    @Column(name = "courseName", nullable = false)
     private String courseName;
 
     @Column(name = "description")

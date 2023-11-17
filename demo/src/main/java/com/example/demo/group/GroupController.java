@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.GroupDto;
-
 
 
 @RestController
@@ -25,18 +23,15 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-   @PostMapping
-    public ResponseEntity<?> createGroup(@RequestBody GroupDto groupDto) {
-        try {
-            Group createdGroup = groupService.saveGroup(groupDto);
-            // Optionally, convert the created group to a DTO before returning
-            // GroupDto createdGroupDto = convertToDto(createdGroup);
-
-            // Return the created group (or DTO)
-            return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
-        } catch (Exception e) {
-            // Handle exceptions (e.g., entity not found, validation errors)
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping
+    public ResponseEntity<List<Group>> getAllGroups() {
+        List<Group> groups = groupService.getAllGroups();
+        return ResponseEntity.ok(groups);
     }
+
+    @PostMapping
+    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
+    Group createdGroup = groupService.saveGroup(group);
+    return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
+}
 }
