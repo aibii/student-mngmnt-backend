@@ -17,19 +17,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class GroupService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GroupService.class);
-
     @Autowired
     private GroupRepository groupRepository;
 
-    @Autowired
-    private TeacherRepository teacherRepository;
-
-    @Autowired
-    private CourseRepository courseRepository;
-
     public List<Group> getAllGroups() {
-        return groupRepository.findAllWithDetails();
+        return groupRepository.findAll();
     }
 
     public Group getGroupById(Long id) {
@@ -37,30 +29,20 @@ public class GroupService {
     }
 
     public Group saveGroup(Group group) {
-        logger.debug("Saving group: {}", group);
-    
-        Teacher teacher = teacherRepository.findById(group.getTeacher().getId())
-                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
-        logger.debug("Fetched teacher: {}", teacher);
-    
-        Course course = courseRepository.findById(group.getCourse().getId())
-                        .orElseThrow(() -> new RuntimeException("Course not found"));
-        logger.debug("Fetched course: {}", course);
-    
-        group.setTeacher(teacher);
-        group.setCourse(course);
-    
-        Group savedGroup = groupRepository.save(group);
-        logger.debug("Group saved with ID: {}", savedGroup.getId());
-    
-        return savedGroup;
+        return groupRepository.save(group);
     }
-    
+
     public void deleteGroup(Long id) {
         groupRepository.deleteById(id);
     }
 
-    public Group updateGroup(Long id, Group Group) {
-        return null;
-    } 
+    public Group updateGroup(Long id, Group updatedGroup) {
+        if (groupRepository.existsById(id)) {
+            updatedGroup.setId(id);
+            return groupRepository.save(updatedGroup);
+        } else {
+            return null;
+        }
+    }
 }
+

@@ -1,7 +1,9 @@
 package com.example.demo.group;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.example.demo.course.Course;
@@ -15,6 +17,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -23,11 +26,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "groups")
-@Data  // Generates getters, setters, toString, equals, and hashCode methods
-@NoArgsConstructor  // Generates a no-args constructor
+@Table(name = "student_groups")
+@Data
+@NoArgsConstructor
 public class Group {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +40,6 @@ public class Group {
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
-
 
     @Column(name = "description")
     private String description;
@@ -53,9 +54,8 @@ public class Group {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @ManyToMany(mappedBy = "groups")
+    private List<Student> students = new ArrayList<>();
 
     public Long getId() {
         return this.id;

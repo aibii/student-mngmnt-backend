@@ -16,6 +16,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -25,11 +27,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "students")
-@Data  // Generates getters, setters, toString, equals, and hashCode methods
-@NoArgsConstructor  // Generates a no-args constructor
-@EqualsAndHashCode(exclude = {"payments", "Groups"})  // Exclude relationships to prevent potential stack overflow issues
+@Data
+@NoArgsConstructor
 public class Student {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
@@ -76,7 +76,12 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+        name = "student_groups_join",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "group_id")
+    )
     private List<Group> groups = new ArrayList<>();
 
     // Enum definitions
@@ -88,3 +93,4 @@ public class Student {
         MORNING, AFTERNOON
     }
 }
+

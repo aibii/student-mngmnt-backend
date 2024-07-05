@@ -48,4 +48,14 @@ public class StudentController {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{studentId}/groups/{groupId}")
+    public ResponseEntity<Student> assignStudentToGroup(@PathVariable Long studentId, @PathVariable Long groupId) {
+        try {
+            Student updatedStudent = studentService.assignStudentToGroup(studentId, groupId);
+            return ResponseEntity.ok(updatedStudent);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

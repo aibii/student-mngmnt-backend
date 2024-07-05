@@ -8,13 +8,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.group.Group;
+import com.example.demo.group.GroupRepository;
+
 @Service
 public class StudentService {
 
-    //private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
-
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
@@ -25,35 +29,38 @@ public class StudentService {
     }
 
     public Student saveStudent(Student student) {
-        //logger.info("Saving student with details: {}", student);
         return studentRepository.save(student);
     }
 
     public Student updateStudent(Long id, Student updatedStudent) {
         if (studentRepository.existsById(id)) {
-            //logger.info("Updating student with ID: {}", id);
+            updatedStudent.setId(id);
             return studentRepository.save(updatedStudent);
         } else {
-           // logger.error("Student with ID {} not found", id);
-            // You might want to throw an exception here or handle it in some way
             return null;
         }
     }
 
     public void deleteStudent(Long id) {
-        if (studentRepository.existsById(id)) {
-           // logger.info("Deleting student with ID: {}", id);
-            studentRepository.deleteById(id);
-        } else {
-          //  logger.error("Student with ID {} not found", id);
-            // Handle this case as you see fit (e.g., throw an exception)
-        }
+        studentRepository.deleteById(id);
     }
 
     public List<Student> getStudentsByStatus(String status) {
-       // logger.info("Fetching students with status: {}", status);
         return studentRepository.findAll();
     }
 
-    // Implement any other student-related business logic here.
+    public Student assignStudentToGroup(Long studentId, Long groupId) {
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
+        Optional<Group> groupOpt = groupRepository.findById(groupId);
+
+        if (studentOpt.isPresent() && groupOpt.isPresent()) {
+            Student student = studentOpt.get();
+            Group group = groupOpt.get();
+            student.getGroups().add(group);
+            return studentRepository.save(student);
+        } else {
+            throw new RuntimeException("Student or Group not found");
+        }
+    }
 }
+
