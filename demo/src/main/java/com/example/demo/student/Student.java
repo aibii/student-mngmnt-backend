@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.demo.group.Group;
 import com.example.demo.payment.Payment;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -82,6 +83,7 @@ public class Student {
         joinColumns = @JoinColumn(name = "student_id"),
         inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @JsonManagedReference
     private List<Group> groups = new ArrayList<>();
 
     // Enum definitions

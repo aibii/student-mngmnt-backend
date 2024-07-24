@@ -9,6 +9,8 @@ import java.util.Set;
 import com.example.demo.course.Course;
 import com.example.demo.student.Student;
 import com.example.demo.teacher.Teacher;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,6 +57,7 @@ public class Group {
     private LocalDate endDate;
 
     @ManyToMany(mappedBy = "groups")
+    @JsonBackReference
     private List<Student> students = new ArrayList<>();
 
     public Long getId() {
