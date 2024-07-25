@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.group.Group;
-import com.example.demo.group.GroupRepository;
+import com.example.demo.repository.GroupRepository;
 
 @Service
 public class StudentService {

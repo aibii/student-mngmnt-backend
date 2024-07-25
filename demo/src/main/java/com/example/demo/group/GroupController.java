@@ -37,4 +37,10 @@ public class GroupController {
     Group createdGroup = groupService.saveGroup(group);
     return new ResponseEntity<>(createdGroup, HttpStatus.CREATED);
 }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
+        groupService.deleteGroup(id);
+        return ResponseEntity.noContent().build();
+    }
 }
