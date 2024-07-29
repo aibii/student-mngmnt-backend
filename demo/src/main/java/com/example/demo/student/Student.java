@@ -1,12 +1,16 @@
 package com.example.demo.student;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.group.Group;
-import com.example.demo.payment.Payment;
+import com.example.demo.entity.ClassGroup;
+import com.example.demo.entity.StudentGroup;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,21 +20,19 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity
+
+/*@Entity
 @Table(name = "students")
-@Data
-@NoArgsConstructor
 public class Student {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
@@ -74,17 +76,13 @@ public class Student {
     @Column(name = "status", nullable = false)
     private String status = "active";
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payments = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "student_groups_join",
-        joinColumns = @JoinColumn(name = "student_id"),
-        inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
-    @JsonManagedReference
-    private List<Group> groups = new ArrayList<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("student-studentGroups")
+    private List<StudentGroup> studentGroups;
+
 
     // Enum definitions
     public enum Gender {
@@ -94,5 +92,307 @@ public class Student {
     public enum Session {
         MORNING, AFTERNOON
     }
+
+    // Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getStudentPhone() {
+        return studentPhone;
+    }
+
+    public void setStudentPhone(String studentPhone) {
+        this.studentPhone = studentPhone;
+    }
+
+    public String getParentPhone() {
+        return parentPhone;
+    }
+
+    public void setParentPhone(String parentPhone) {
+        this.parentPhone = parentPhone;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public List<StudentGroup> getStudentGroups() {
+        return studentGroups;
+    }
+
+    public void setStudentGroups(List<StudentGroup> studentGroups) {
+        this.studentGroups = studentGroups;
+    }
+
+    public List<Group> getGroups() {
+        List<Group> groups = new ArrayList<>();
+        for (StudentGroup studentGroup : studentGroups) {
+            groups.add(studentGroup.getGroup());
+        }
+        return groups;
+    }
+} */
+
+@Entity
+@Table(name = "students")
+public class Student {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long studentId;
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 255)
+    private String firstName;
+
+    @Column(nullable = false)
+    @Size(min = 1, max = 255)
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Gender gender;
+
+    private String school;
+
+    @Size(max = 255)
+    private String grade;
+
+    @Enumerated(EnumType.STRING)
+    private Session session;
+
+    @Temporal(TemporalType.DATE)
+    @Past
+    private Date dateOfBirth;
+
+    @Size(max = 255)
+    private String address;
+
+    @Size(max = 20)
+    private String studentPhone;
+
+    @Size(max = 20)
+    private String parentPhone;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private java.util.Date registrationDate;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ACTIVE;
+
+    // Getters and Setters
+
+    public enum Gender {
+        MALE, FEMALE
+    }
+
+    public enum Session {
+        MORNING, AFTERNOON
+    }
+
+    public enum Status {
+        ACTIVE, INACTIVE
+    }
+
+
+    //Getters and Setters
+
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getStudentPhone() {
+        return studentPhone;
+    }
+
+    public void setStudentPhone(String studentPhone) {
+        this.studentPhone = studentPhone;
+    }
+
+    public String getParentPhone() {
+        return parentPhone;
+    }
+
+    public void setParentPhone(String parentPhone) {
+        this.parentPhone = parentPhone;
+    }
+
+    public java.util.Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(java.util.Date date) {
+        this.registrationDate = date;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    
 }
 

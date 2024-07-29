@@ -76,6 +76,42 @@
     <scope>provided</scope>
 </dependency>
 
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+</dependency>
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+</dependency>
+
+	<!-- Hibernate Validator -->
+    <dependency>
+        <groupId>org.hibernate.validator</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>6.2.0.Final</version>
+    </dependency>
+
+    <!-- Java Validation API -->
+    <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>2.0.1.Final</version>
+    </dependency>
+
+    <!-- Optional: Bean Validation (if not using JPA provider like Hibernate) -->
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.el</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+
+ 
+   <dependency>
+     <groupId>org.hsqldb</groupId>
+     <artifactId>hsqldb</artifactId>
+     <version>2.5.0</version>
+   </dependency>
  </dependencies>
 	<build>
 		<plugins>
