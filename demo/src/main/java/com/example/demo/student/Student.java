@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.entity.ClassGroup;
+import com.example.demo.class_group.ClassGroup;
 import com.example.demo.entity.StudentGroup;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
