@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.ClassGroup;
+import com.example.demo.class_group.ClassGroup;
 
 import jakarta.persistence.EntityNotFoundException;
 

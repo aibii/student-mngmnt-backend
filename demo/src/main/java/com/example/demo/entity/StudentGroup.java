@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import com.example.demo.class_group.ClassGroup;
 import com.example.demo.student.Student;
 
 import jakarta.persistence.Column;
