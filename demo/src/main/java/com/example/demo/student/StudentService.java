@@ -1,15 +1,19 @@
 package com.example.demo.student;
 
 import java.lang.System.Logger;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.net.http.HttpClient;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.group.Group;
-import com.example.demo.repository.GroupRepository;
+import com.example.demo.entity.ClassGroup;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class StudentService {
@@ -17,75 +21,40 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Autowired
-    private GroupRepository groupRepository;
-
-
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepository.findById(id);
+    public Student getStudentById(Long id) {
+        return studentRepository.findById(id).orElse(null);
     }
 
     public Student saveStudent(Student student) {
+        if (student.getRegistrationDate() == null) {
+            student.setRegistrationDate(new Date());  // Set to current date
+        }
         return studentRepository.save(student);
     }
 
-    public Student updateStudent(Long id, Student updatedStudent) {
-        Optional<Student> existingStudent = studentRepository.findById(id);
-        if (existingStudent.isPresent()) {
-            Student student = existingStudent.get();
-            student.setFirstName(updatedStudent.getFirstName());
-            student.setLastName(updatedStudent.getLastName());
-            student.setGender(updatedStudent.getGender());
-            student.setSchool(updatedStudent.getSchool());
-            student.setGrade(updatedStudent.getGrade());
-            student.setSession(updatedStudent.getSession());
-            student.setDateOfBirth(updatedStudent.getDateOfBirth());
-            student.setAddress(updatedStudent.getAddress());
-            student.setStudentPhone(updatedStudent.getStudentPhone());
-            student.setParentPhone(updatedStudent.getParentPhone());
-            student.setStatus(updatedStudent.getStatus());
-            student.setRegistrationDate(updatedStudent.getRegistrationDate());
+    public Student updateStudent(Student student) {
+        // Fetch the existing student from the database
+        Optional<Student> existingStudentOptional = studentRepository.findById(student.getStudentId());
+        if (existingStudentOptional.isPresent()) {
+            Student existingStudent = existingStudentOptional.get();
+            
+            // Retain the original registration date
+            student.setRegistrationDate(existingStudent.getRegistrationDate());
+            
+            // Proceed with updating other fields
             return studentRepository.save(student);
         } else {
-            throw new IllegalArgumentException("Student not found with id: " + id);
+            throw new EntityNotFoundException("Student not found with ID: " + student.getStudentId());
         }
     }
+
 
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
-    }
-
-    public Student assignStudentToGroup(Long studentId, Long groupId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Group not found with id: " + groupId));
-    
-        if (!student.getGroups().contains(group)) {
-            student.getGroups().add(group);
-            group.getStudents().add(student);
-            studentRepository.save(student);
-            groupRepository.save(group);
-        }
-        return student;
-    }
-    
-    public void removeStudentFromGroup(Long studentId, Long groupId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("Group not found with id: " + groupId));
-    
-        if (student.getGroups().contains(group)) {
-            student.getGroups().remove(group);
-            group.getStudents().remove(student);
-            studentRepository.save(student);
-            groupRepository.save(group);
-        }
     }
 }
 
