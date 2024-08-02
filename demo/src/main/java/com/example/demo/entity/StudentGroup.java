@@ -22,7 +22,7 @@ import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "student_group")
-public class StudentGroup implements Serializable {
+public class StudentGroup {
 
     @EmbeddedId
     private StudentGroupId id;
@@ -38,11 +38,67 @@ public class StudentGroup implements Serializable {
     private ClassGroup classGroup;
 
     @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private LocalDate endDate;
 
-    // Getters and Setters
+    // Constructors, Getters, and Setters
+    public StudentGroup() {}
+
+    /*public StudentGroup(Student student, ClassGroup classGroup, Date startDate) {
+        this.student = student;
+        this.classGroup = classGroup;
+        this.startDate = startDate;
+        this.id = new StudentGroupId(student.getStudentId(), classGroup.getId());
+    }*/
+
+    public StudentGroup(StudentGroupId id, Student student, ClassGroup classGroup, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.student = student;
+        this.classGroup = classGroup;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public StudentGroupId getId() {
+        return id;
+    }
+
+    public void setId(StudentGroupId id) {
+        this.id = id;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public ClassGroup getClassGroup() {
+        return classGroup;
+    }
+
+    public void setClassGroup(ClassGroup classGroup) {
+        this.classGroup = classGroup;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 }
 
