@@ -20,6 +20,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -284,6 +287,10 @@ public class Student {
     public enum Status {
         ACTIVE, INACTIVE
     }
+
+    // Mapped Many-to-Many relationship with ClassGroup
+    @ManyToMany(mappedBy = "students")
+    private List<ClassGroup> classGroups;
 
 
     //Getters and Setters

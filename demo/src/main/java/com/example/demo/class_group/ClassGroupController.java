@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.GroupWithStudentsDto;
 import com.example.demo.student.Student;
 
 import ch.qos.logback.classic.Logger;
@@ -28,12 +29,19 @@ public class ClassGroupController {
     @Autowired
     private ClassGroupService classGroupService;
 
+    // Return all groups
     @GetMapping
     public List<ClassGroup> getAllGroups() {
         return classGroupService.getAllGroups();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/with-students")
+    public List<GroupWithStudentsDto> getAllGroupsWithStudents() {
+        return classGroupService.getAllGroupsWithStudents();
+    }
+
+    // Return a specific group by its ID
+    @GetMapping("/{id:\\d+}") // <-- Here, we explicitly say {id} should be a number
     public ResponseEntity<ClassGroup> getGroupById(@PathVariable Long id) {
         ClassGroup classGroup = classGroupService.getGroupById(id);
         return ResponseEntity.ok(classGroup);
