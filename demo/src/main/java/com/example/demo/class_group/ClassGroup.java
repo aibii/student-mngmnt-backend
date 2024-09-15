@@ -2,19 +2,24 @@ package com.example.demo.class_group;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import com.example.demo.student.Student;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
@@ -53,6 +58,13 @@ public class ClassGroup {
     @Column(name = "monthly_fee", nullable = false)
     private Double monthlyFee;
 
+    // Many-to-Many Relationship with Student through student_group table
+    @ManyToMany
+    @JoinTable(
+      name = "student_group",
+      joinColumns = @JoinColumn(name = "group_id"),
+      inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private List<Student> students;
 
      // Getters and Setters
 
