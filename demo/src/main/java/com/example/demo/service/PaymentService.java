@@ -36,4 +36,8 @@ public class PaymentService {
     public void deletePayment(Long paymentId) {
         paymentRepository.deleteById(paymentId);
     }
+
+    public Double getStudentDebtInGroup(Long studentId, Long groupId) {
+        return paymentRepository.calculateDebtForStudentInGroup(studentId, groupId);
+    }
 }

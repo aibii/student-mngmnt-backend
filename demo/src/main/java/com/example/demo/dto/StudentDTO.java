@@ -7,13 +7,15 @@ public class StudentDTO {
     private String studentFirstName;
     private String studentLastName;
     private Date enrollmentDate;
+    private Double debt;
 
     // Constructor, getters, and setters
-    public StudentDTO(Long studentId, String studentFirstName, String studentLastName, java.util.Date enrollmentDate) {
+    public StudentDTO(Long studentId, String studentFirstName, String studentLastName, java.util.Date enrollmentDate, Double debt) {
         this.studentId = studentId;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
         this.enrollmentDate = enrollmentDate;  // No casting needed
+        this.debt = debt;
     }
 
     public Long getStudentId() {
@@ -46,5 +48,13 @@ public class StudentDTO {
 
     public void setEnrollmentDate(Date enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
+    }
+
+    public Double getDebt() {
+        return debt;
+    }
+
+    public void setDebt(Double debt) {
+        this.debt = debt;
     }
 }

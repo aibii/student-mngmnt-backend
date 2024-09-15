@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.example.demo.class_group.ClassGroup;
@@ -43,7 +44,7 @@ public class Payment {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "due_date")
-    private Date dueDate;
+    private LocalDate dueDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -93,12 +94,12 @@ public class Payment {
         this.datePaid = datePaid;
     }
 
-    public Date getDueDate() {
+    public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+    public void setDueDate(LocalDate localDate) {
+        this.dueDate = localDate;
     }
 
     public PaymentStatus getStatus() {

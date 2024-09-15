@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.GroupWithStudentsDto;
 import com.example.demo.dto.StudentDTO;
+import com.example.demo.repository.PaymentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -19,6 +20,9 @@ import jakarta.persistence.EntityNotFoundException;
 public class ClassGroupService {
     @Autowired
     private ClassGroupRepository classGroupRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public List<ClassGroup> getAllGroups() {
         return classGroupRepository.findAll();
@@ -42,11 +46,16 @@ public class ClassGroupService {
             Long studentId = (Long) result[2];
             String studentFirstName = (String) result[3];
             String studentLastName = (String) result[4];
-            java.util.Date enrollmentDate = (java.util.Date) result[5];  // Casting necessary for Date
+            java.util.Date enrollmentDate = (java.util.Date) result[5];
     
+            // Calculate the debt for this student in the group
+            Double debt = paymentRepository.calculateDebtForStudentInGroup(studentId, groupId);
+    
+            // Get or create the group DTO
             GroupWithStudentsDto groupDTO = groupMap.computeIfAbsent(groupId, id -> new GroupWithStudentsDto(groupId, groupName, "Teacher Name"));
     
-            groupDTO.getStudents().add(new StudentDTO(studentId, studentFirstName, studentLastName, enrollmentDate));
+            // Add the student with the calculated debt
+            groupDTO.getStudents().add(new StudentDTO(studentId, studentFirstName, studentLastName, enrollmentDate, debt));
         }
     
         return new ArrayList<>(groupMap.values());
