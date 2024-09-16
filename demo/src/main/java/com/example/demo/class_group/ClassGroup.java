@@ -58,6 +58,10 @@ public class ClassGroup {
     @Column(name = "monthly_fee", nullable = false)
     private Double monthlyFee;
 
+    @Column(name = "schedule", nullable = false)
+    private String schedule; // Make sure this is included
+
+
     // Many-to-Many Relationship with Student through student_group table
     @ManyToMany
     @JoinTable(
@@ -130,6 +134,14 @@ public class ClassGroup {
 
     public void setMonthlyFee(Double monthlyFee) {
         this.monthlyFee = monthlyFee;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 }
 
