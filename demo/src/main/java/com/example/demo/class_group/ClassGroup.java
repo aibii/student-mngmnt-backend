@@ -1,7 +1,9 @@
 package com.example.demo.class_group;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
@@ -58,13 +60,32 @@ public class ClassGroup {
     @Column(name = "monthly_fee", nullable = false)
     private Double monthlyFee;
 
+    @Column(name = "schedule", nullable = false)
+    private String schedule; // Make sure this is included
+
+    @Column(name = "lesson_time", nullable = false)
+    private LocalTime lessonTime;  // Add time when the lesson happens (e.g., 09:00)
+
+
     // Many-to-Many Relationship with Student through student_group table
     @ManyToMany
     @JoinTable(
       name = "student_group",
       joinColumns = @JoinColumn(name = "group_id"),
       inverseJoinColumns = @JoinColumn(name = "student_id"))
-    private List<Student> students;
+      private List<Student> students;
+
+
+    public ClassGroup() {}
+
+    public ClassGroup(String groupName, Long teacherId, Long courseId, String schedule, LocalTime lessonTime, Double monthlyFee) {
+        this.groupName = groupName;
+        this.teacherId = teacherId;
+        this.courseId = courseId;
+        this.schedule = schedule;
+        this.lessonTime = lessonTime;
+        this.monthlyFee = monthlyFee;
+    }
 
      // Getters and Setters
 
@@ -130,6 +151,26 @@ public class ClassGroup {
 
     public void setMonthlyFee(Double monthlyFee) {
         this.monthlyFee = monthlyFee;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
+    public LocalTime getLessonTime() {
+        return lessonTime;
+    }
+
+    public void setLessonTime(LocalTime lessonTime) {
+        this.lessonTime = lessonTime;
+    }
+
+    public LocalTime getTime() {
+        return this.lessonTime;  // Return the lesson time stored in the class
     }
 }
 
