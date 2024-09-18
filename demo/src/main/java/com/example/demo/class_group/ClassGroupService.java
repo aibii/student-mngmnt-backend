@@ -86,4 +86,8 @@ public class ClassGroupService {
     public void deleteGroup(Long id) {
         classGroupRepository.deleteById(id);
     }
+
+    public boolean existsById(Long groupId) {
+        return classGroupRepository.existsById(groupId);
+    }
 }

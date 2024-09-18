@@ -1,8 +1,10 @@
 package com.example.demo.student_group;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.class_group.ClassGroupService;
 import com.example.demo.entity.StudentGroup;
 import com.example.demo.entity.StudentGroupId;
 import com.example.demo.service.StudentGroupService;
@@ -23,8 +26,11 @@ public class StudentGroupController {
 
     private final StudentGroupService studentGroupService;
 
+    private final ClassGroupService classGroupService;
+
     public StudentGroupController(StudentGroupService studentGroupService) {
         this.studentGroupService = studentGroupService;
+        this.classGroupService = null;
     }
 
     @GetMapping
@@ -39,7 +45,7 @@ public class StudentGroupController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentGroup> assignStudentToGroup(@RequestBody StudentGroup studentGroup) {
+public ResponseEntity<StudentGroup> assignStudentToGroup(@RequestBody StudentGroup studentGroup) {
     // Debugging line to check the incoming data
     System.out.println("Received StudentGroup: " + studentGroup);
 
@@ -49,13 +55,13 @@ public class StudentGroupController {
 
     Long studentId = studentGroup.getId().getStudentId();
     Long groupId = studentGroup.getId().getGroupId();
+    
+    // Assign student to group using the start date from the request body
+    StudentGroup savedGroup = studentGroupService.assignStudentToGroup(studentId, groupId, studentGroup.getStartDate());
 
-    // Process the assignment, such as saving to the database
-    // Ensure that student and group exist and are properly linked
-    studentGroupService.assignStudentToGroup(studentId, groupId);
-
-    return ResponseEntity.ok(studentGroup);
-}
+    // Return the saved group
+    return ResponseEntity.ok(savedGroup);
+    }
 
     @DeleteMapping("/{studentId}/{groupId}")
     public ResponseEntity<Void> removeStudentFromGroup(@PathVariable Long studentId, @PathVariable Long groupId) {
